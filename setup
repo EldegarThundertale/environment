@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+function help {
+    echo "usage: $(basename $0) [options] <install|purge> <component>"
+    echo ""
+    echo "  Install or uninstall components in the current environment."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                      show usages and exit"
+    echo ""
+    echo "Components:"
+    echo "  programs                        install or uninstall programs from environment."
+    exit 1
+}
+
+if [ -L ${BASH_SOURCE[0]} ]
+then
+	PROJECT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd )"
+else
+	PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
+CMD=""
+i=1
+while((i <= $#))
+do
+    case ${!i} in
+        -h | --help)
+            if [[ -z $CMD ]]
+            then
+                help
+            else
+                CMD="$CMD ${!i}"
+            fi
+            ;;
+        install | purge)
+            MODE=${!i}
+            ;;
+        *)
+            CMD="$CMD ${!i}"
+            ;;
+    esac
+
+    i=$(expr ${i} + 1)
+done
+
+set -x
+
+if [[ $CMD =~ "programs" ]]
+then
+    $PROJECT_DIR/programs/setup $MODE ${CMD/base/}
+    exit 0
+fi
+
+set +x
+
+help

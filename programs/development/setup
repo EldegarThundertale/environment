@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [[ $1 == "install" ]]
+then
+    sudo apt update
+fi
+
+sudo apt $1 -y \
+        git \
+        vim \
+        nano \
+        ant \
+        maven \
+        gradle \
+        nodejs \
+        npm \
+        openjdk-11-jdk
+
+sudo apt clean -y

@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+function help {
+    echo "usage: $(basename $0) [options] <install|purge> <component>"
+    echo ""
+    echo "  Install or uninstall programs."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                      show usages and exit"
+    echo ""
+    echo "Components:"
+    echo "  generic                         install or uninstall generic programs"
+    echo "  dev                             install or uninstall dev build programs"
+    echo "  sync                            install or uninstall sync programs"
+    exit 1
+}
+
+if [ -L ${BASH_SOURCE[0]} ]
+then
+	PROJECT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd )"
+else
+	PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
+CMD=""
+i=1
+while((i <= $#))
+do
+    case ${!i} in
+        -h | --help)
+            help
+            ;;
+        install | purge)
+            MODE=${!i}
+            ;;
+        generic)
+            GENERIC=1
+            ;;
+        dev)
+            DEV=1
+            ;;
+        sync)
+            SYNC=1;
+            ;;
+    esac
+
+    i=$(expr ${i} + 1)
+done
+
+if [[ $GENERIC ]]
+then
+    $PROJECT_DIR/generic/setup $MODE
+    exit 0
+fi
+
+if [[ $DEV ]]
+then
+    $PROJECT_DIR/development/setup $MODE
+    exit 0
+fi
+
+if [[ $SYNC ]]
+then
+    $PROJECT_DIR/sync/setup $MODE
+    exit 0
+fi
+
+help

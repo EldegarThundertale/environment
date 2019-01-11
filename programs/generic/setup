@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+if [[ $1 == "install" ]]
+then
+    sudo apt update
+    sudo apt install -y \
+            sudo \
+            htop \
+            wget \
+            curl \
+            openssh-server \
+            openssl \
+            net-tools \
+            dnsutils \
+            iputils-ping
+elif [[ $1 == "purge" ]]
+then
+    echo "Purge not supported for generic programs"
+    exit 6
+fi
+
+sudo apt clean -y
