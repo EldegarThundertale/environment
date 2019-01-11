@@ -2,7 +2,7 @@
 
 if [[ $1 == "install" ]]
 then
-    wget https://mega.nz/linux/MEGAsync/xUbuntu_18.10/amd64/megasync-xUbuntu_18.10_amd64.deb -O /tmp/sync.deb
+    wget https://mega.nz/linux/MEGAsync/xUbuntu_18.10/amd64/megasync-xUbuntu_18.04_amd64.deb -O /tmp/sync.deb
 
     sudo dpkg -i /tmp/sync.deb
     sudo apt -f install -y
