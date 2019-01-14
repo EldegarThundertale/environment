@@ -6,6 +6,10 @@ then
     exit 6
 fi
 
-mega-sync $@
+if ! [[ $(mega-sync $@) =~ "Already exists" ]]
+then
+    mega-sync -s $1
+    mega-sync -r $1
+fi
 
 

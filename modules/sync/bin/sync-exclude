@@ -11,6 +11,6 @@ for pattern in $(mega-exclude | sed 's/List of excluded names://g' | awk '{ prin
 do
         PATTERNS="$PATTERNS $pattern"
 done
-mega-exclude -d ${PATTERNS}
+mega-exclude -d ${PATTERNS} --restart-syncs
 
 
