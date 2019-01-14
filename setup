@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function help {
-    echo "usage: $(basename $0) [options] <mode> <component>"
+    echo "usage: $(basename $0) <mode> <component> [options]"
     echo ""
     echo "  Setup components in the current environment."
     echo ""
@@ -9,7 +9,7 @@ function help {
     echo "  -h, --help                      show usages and exit"
     echo "      --debug                     set debug mode on"
     echo ""
-    echo "Modes"
+    echo "Modes:"
     echo "  update                          update components from environment"
     echo "  install                         install components from environment"
     echo "  purge                           uninstall components from environment"
@@ -18,7 +18,7 @@ function help {
     do
         echo "  $component"
     done
-    exit 1
+    exit $1
 }
 
 if [ -L ${BASH_SOURCE[0]} ]
@@ -35,14 +35,14 @@ fi
 
 source $LIB_DIR/functions
 
-CMD=""
+CMP=""
 setArgs ""
 i=1
 while((i <= $#))
 do
     case ${!i} in
         -h | --help)
-            if ! [[ $CMD ]]
+            if ! [[ $CMP ]]
             then
                 help
             else
@@ -50,7 +50,7 @@ do
             fi
             ;;
         --debug)
-            if ! [[ $CMD ]]
+            if ! [[ $CMP ]]
             then
                 DEBUG=1
             else
@@ -61,9 +61,9 @@ do
             MODE=${!i}
             ;;
         *)
-            if ! [[ $CMD ]]
+            if ! [[ $CMP ]]
             then
-                CMD="${!i}"
+                CMP="${!i}"
             else
                 addArgs "${!i}"
             fi
@@ -75,14 +75,18 @@ done
 
 if ! [[ $MODE ]]
 then
-    echo "Missing mode! Abort."
-    exit 6
+    abort  "No mode specified!" 6
 fi
 
-if [[ $CMD ]]
+if ! [[ $CMP ]]
 then
-    $FILE_DIR/$CMD/setup $(args 2 -1) $MODE $(args 1)
+    abort  "No component specified!" 6
+else
+    debug true
+    $FILE_DIR/$CMP/setup $MODE $(args)
     exit $?
 fi
+
+debug false
 
 help

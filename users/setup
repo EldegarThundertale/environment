@@ -2,7 +2,7 @@
 
 
 function help {
-    echo "usage: $(basename $0) [options] <mode> <user>"
+    echo "usage: $(basename $0) <mode> [options]"
     echo ""
     echo "  Setup users in the current environment."
     echo ""
@@ -75,12 +75,12 @@ if ! [[ $MODE ]]
 then
     abort "Missing mode!" 6
 else
-     if [[ -e "$FILE_DIR/bin/$MODE" ]]
+     if ! [[ -e "$FILE_DIR/bin/$MODE" ]]
     then
+        abort "Not supported $MODE mode!" 6
+    else
         debug true
         $FILE_DIR/bin/$MODE $(args)
-    else
-        abort "Not supported $MODE mode!" 6
     fi
     exit $?
 fi

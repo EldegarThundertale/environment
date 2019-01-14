@@ -2,7 +2,7 @@
 
 
 function help {
-    echo "usage: $(basename $0) [options] <user>"
+    echo "usage: $(basename $0) <user> [options]"
     echo ""
     echo "  Purge users in the current environment."
     echo ""

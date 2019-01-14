@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function help {
-    echo "usage: $(basename $0) [options] <user>"
+    echo "usage: $(basename $0) <user> [options]"
     echo ""
     echo "  Update user configuration in the current environment."
     echo ""
@@ -64,9 +64,10 @@ then
     EV="\$HOME/.local/environment"
     su -l $user -c "cd $EV && git pull"
 
+    su -l $user -c "$EV/exec sync-login"
+
     SYNC="\$HOME/.local/home"
     su -l $user -c "mkdir -p $SYNC"
-    su -l $user -c "$EV/exec sync-login"
     su -l $user -c "$EV/exec sync-exclude"
     su -l $user -c "$EV/exec sync $SYNC /environment/users/$user"
 

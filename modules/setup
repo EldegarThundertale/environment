@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
 function help {
-    echo "usage: $(basename $0) [options] <mode> <component>"
+    echo "usage: $(basename $0) <mode> <component> [options]"
     echo ""
-    echo "  Setup components in the current environment."
+    echo "  Setup modules in the current environment."
     echo ""
     echo "Options:"
     echo "  -h, --help                      show usages and exit"
     echo "      --debug                     set debug mode on"
     echo "  -a, --all                       make the action for all components"
     echo ""
-    echo "Modes"
+    echo "Modes:"
     echo "  update                          update components from environment"
     echo "  install                         install components from environment"
     echo "  purge                           uninstall components from environment"
-    echo "Components:"
-    for component in $(getComponents $FILE_DIR)
+    echo "Modules:"
+    for module in $(getComponents $FILE_DIR)
     do
-        echo "  $component"
+        echo "  $module"
     done
     exit 1
 }
@@ -36,14 +36,14 @@ fi
 
 source $LIB_DIR/functions
 
-CMD=""
-ARGS=""
+MOD=""
+setArgs ""
 i=1
 while((i <= $#))
 do
     case ${!i} in
         -h | --help)
-            if ! [[ $CMD ]]
+            if ! [[ $MOD ]]
             then
                 help
             else
@@ -51,7 +51,7 @@ do
             fi
             ;;
         --debug)
-            if ! [[ $CMD ]]
+            if ! [[ $MOD ]]
             then
                 DEBUG=1
             else
@@ -65,9 +65,9 @@ do
             MODE=${!i}
             ;;
         *)
-            if ! [[ $CMD ]]
+            if ! [[ $MOD ]]
             then
-                CMD="${!i}"
+                MOD="${!i}"
             else
                 addArgs "${!i}"
             fi
@@ -79,28 +79,32 @@ done
 
 if ! [[ $MODE ]]
 then
-    echo "Missing mode! Abort."
-    exit 6
+    abort  "No mode specified!" 6
 fi
 
-if [[ $CMD ]]
+if ! [[ $MOD ]]
 then
-    if [[ -e "$FILE_DIR/$CMD/$MODE" ]]
+    abort  "No module specified!" 6
+else
+    if ! [[ -e "$FILE_DIR/$MOD/$MODE" ]]
     then
-        $FILE_DIR/$CMD/$MODE $ARGS
+        abort "Not supported $MODE mode for $MOD module!" 6
     else
-        abort "Not supported $MODE mode for $CMD component!" 6
+        debug true
+        $FILE_DIR/$MOD/$MODE $(args)
     fi
     exit $?
 fi
 
 if [[ $ALL ]]
 then
-    for component in $(getComponents $FILE_DIR)
+    for module in $(getComponents $FILE_DIR)
     do
-        $0 $component $MODE $ARGS
+        $0 $module $MODE $(args)
     done
     exit $?
 fi
+
+debug false
 
 help

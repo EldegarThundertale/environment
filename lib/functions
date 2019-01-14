@@ -62,9 +62,9 @@ function args
 
 function abort
 {
-    echo $1
-    echo "Abort."
-    exit $2
+    echo -e "\e[38;5;124m[ERROR] $1\e[39m"
+
+    help $2
 }
 
 function openFile
