@@ -72,7 +72,7 @@ else
     then
         sudo mkdir "$home"
     fi
-    sudo useradd -d $home $user -p $(openssl passwd -1 $passwd)
+    sudo useradd -d $home $user -p $(openssl passwd -1 $passwd) -s /bin/bash
     sudo chown -R "$user:$user" "$home"
 
     EV="$home/.local/environment"
