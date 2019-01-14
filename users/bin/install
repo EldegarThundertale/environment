@@ -2,7 +2,7 @@
 
 
 function help {
-    echo "usage: $(basename $0) [options] <user> <path>"
+    echo "usage: $(basename $0) [options] <user> <path> <passwd>"
     echo ""
     echo "  Install users in the current environment."
     echo ""
@@ -51,7 +51,7 @@ do
     i=$(expr ${i} + 1)
 done
 
-if ! [[ $(args | wc -w) -eq 2 ]]
+if ! [[ $(args | wc -w) -eq 3 ]]
 then
     abort "Missing arguments!" 6
 fi
@@ -62,18 +62,20 @@ then
 else
     user=$(args 1)
     home=$(args 2)
+    passwd=$(args 3)
 
     if ! [[ -d "$home" ]]
     then
         sudo mkdir "$home"
     fi
-    sudo useradd -d $home $user
+    sudo useradd -d $home $user -p $(openssl passwd -1 $passwd)
     sudo chown -R "$user:$user" "$home"
 
     EV="$home/.local/environment"
     su -l $user -c "git clone https://github.com/EldegarThundertale/environment.git $EV"
 
     debug true
+
 #    su -l $user -c "mkdir -p $home/.local/environment"
 
 #    su -l $user -c "mkdir -p $home/.local/sync"
@@ -81,8 +83,7 @@ else
 #    su -l $user -c "$ENV/exec sync-login"
 #    su -l $user -c "$ENV/exec sync \$HOME/.local/sync /environment/users/$user"
 
-    su -l $user -c "$EV/update users $user"
-
+    $FILE_DIR/update eldegar
     exit 0
 fi
 

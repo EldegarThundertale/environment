@@ -59,8 +59,26 @@ if [[ $(cat /etc/passwd | grep $(args 1)) ]]
 then
     user=$(args 1)
 
-    su -l $user -c ""
+    debug true
+
+    EV="\$HOME/.local/environment"
+    su -l $user -c "cd $EV && git pull"
+
+    SYNC="\$HOME/.local/sync"
+    su -l $user -c "mkdir -p $SYNC"
+    su -l $user -c "$EV/exec sync $SYNC /environment/users/$user"
+
+    for file in $(su -l $user -c "$EV/exec sync-ls /environment/users/$user")
+    do
+        if ! [[ -e $file ]]
+        then
+            su -l $user -c "ln -sf $SYNC \$HOME/"
+        fi
+    done
+
     exit 0
 fi
+
+debug false
 
 help

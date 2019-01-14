@@ -41,6 +41,14 @@ do
                 ARGS="$ARGS${!i} "
             fi
             ;;
+        --debug)
+            if ! [[ $CMD ]]
+            then
+                DEBUG=1
+            else
+                addArgs "${!i}"
+            fi
+            ;;
         *)
             if ! [[ $CMD ]]
             then
@@ -54,14 +62,12 @@ do
     i=$(expr ${i} + 1)
 done
 
-set -x
-
 if [[ $CMD ]]
 then
     $CMD $ARGS
     exit $?
 fi
 
-set +x
+debug false
 
 help
