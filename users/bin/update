@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+function help {
+    echo "usage: $(basename $0) [options] <user>"
+    echo ""
+    echo "  Update user configuration in the current environment."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                      show usages and exit"
+    echo "      --debug                     set debug mode on"
+    echo ""
+    echo "Users:"
+    for user in $(sync-ls "/environment/users")
+    do
+        echo "  $user"
+    done
+    exit 1
+}
+
+if [ -L ${BASH_SOURCE[0]} ]
+then
+	FILE_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd )"
+else
+	FILE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
+if ! [[ $LIB_DIR ]]
+then
+    export LIB_DIR=$FILE_DIR/lib
+fi
+
+source $LIB_DIR/functions
+
+setArgs ""
+i=1
+while((i <= $#))
+do
+    case ${!i} in
+        -h | --help)
+            help
+            ;;
+        --debug)
+            DEBUG=1
+            ;;
+        *)
+            addArgs "${!i}"
+            ;;
+    esac
+
+    i=$(expr ${i} + 1)
+done
+
+if ! [[ $(args | wc -w) -eq 1 ]]
+then
+    abort "Missing arguments!" 6
+fi
+
+if [[ $(cat /etc/passwd | grep $(args 1)) ]]
+then
+    user=$(args 1)
+
+    su -l $user -c ""
+    exit 0
+fi
+
+help

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+function help {
+    echo "usage: $(basename $0) [options] <component>"
+    echo ""
+    echo "  Execute a components in the current environment."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                      show usages and exit"
+    echo ""
+    echo "Components:"
+    for component in $(getComponents $FILE_DIR)
+    do
+        echo "  $component"
+    done
+    exit 1
+}
+
+if [ -L ${BASH_SOURCE[0]} ]
+then
+	FILE_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd )"
+else
+	FILE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
+export LIB_DIR=$FILE_DIR/lib
+
+source $LIB_DIR/functions
+
+CMD=""
+ARGS=""
+i=1
+while((i <= $#))
+do
+    case ${!i} in
+        -h | --help)
+            if ! [[ $CMD ]]
+            then
+                help
+            else
+                ARGS="$ARGS${!i} "
+            fi
+            ;;
+        *)
+            if ! [[ $CMD ]]
+            then
+                CMD="${!i}"
+            else
+                ARGS="$ARGS${!i} "
+            fi
+            ;;
+    esac
+
+    i=$(expr ${i} + 1)
+done
+
+set -x
+
+if [[ $CMD ]]
+then
+    $CMD $ARGS
+    exit $?
+fi
+
+set +x
+
+help

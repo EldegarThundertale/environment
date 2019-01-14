@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if ! [[ $(which mega-sync) ]]
+then
+    echo "Missing sync module! Abort."
+    exit 6
+fi
+
+mega-sync $@
+
+

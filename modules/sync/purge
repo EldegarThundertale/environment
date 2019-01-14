@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+sudo apt purge megacmd -y
+
+sudo apt clean -y
+
+

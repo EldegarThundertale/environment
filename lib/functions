@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+
+function getComponents
+{
+    for file in $(ls $1)
+    do
+        if [[ -d $1/$file ]] && ! [[  $file =~ "lib" ]]
+        then
+            echo $file
+        fi
+    done
+}
+
+function debug
+{
+    if [[ $DEBUG ]]
+    then
+        if [[ "$1" =~ "true" ]]
+        then
+            set -x
+        elif [[ "$1" =~ "false" ]]
+        then
+            set +x
+        fi
+    fi
+}
+
+function setArgs
+{
+    ARGS="$@"
+}
+
+function addArgs
+{
+    setArgs "$(args)$@ "
+}
+
+function args
+{
+    if [[ $# -eq 2 ]]
+    then
+        out=""
+        i=$1
+        max=$2
+        if [[ max -le -1 ]]
+        then
+            max=$(expr $(echo $ARGS | wc -w) - $max )
+        fi
+        while((i <= $max))
+        do
+            out="$out$(args $i) "
+            i=$(expr ${i} + 1)
+        done
+        echo $out
+    elif [[ $# -eq 1 ]]
+    then
+        echo "$ARGS" | awk "{print \$$1;}"
+    else
+        echo "$ARGS"
+    fi
+}
+
+function abort
+{
+    echo $1
+    echo "Abort."
+    exit $2
+}
+
+function openFile
+{
+    export PROGRAM_FILE=$1
+    cat /dev/null > $PROGRAM_FILE
+}
+
+function closeFile
+{
+   export PROGRAM_FILE=/dev/null
+}
+
+function appendFile
+{
+    echo "$@" >> $PROGRAM_FILE
+}
+
+
+function buildPrograms
+{
+    openFile $LIB_DIR/programs
+    chmod +x $PROGRAM_FILE
+
+    appendFile "#!/usr/bin/env bash"
+    appendFile ""
+
+    export MODULES_DIR=$LIB_DIR/../modules
+
+    for component in $(getComponents $MODULES_DIR)
+    do
+        for file in $(ls $MODULES_DIR/$component)
+        do
+            if [[ -d $MODULES_DIR/$component/$file ]] && [[ $file =~ "bin" ]]
+            then
+                for program in $(ls $MODULES_DIR/$component/$file)
+                do
+                    addProgram "$program" "$MODULES_DIR/$component/$file/$program \$@"
+                done
+            fi
+        done
+    done
+
+    loadPrograms
+    closeFile
+}
+
+function addProgram
+{
+    appendFile "function $1"
+    appendFile "{"
+    appendFile "    $2"
+    appendFile "}"
+    appendFile ""
+
+    loadPrograms
+}
+
+function loadPrograms
+{
+    source $PROGRAM_FILE
+}
+
+buildPrograms

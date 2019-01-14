@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if ! [[ $(which mega-login) ]]
+then
+    echo "Missing sync module! Abort."
+    exit 6
+fi
+
+echo -n "Email: "
+read email
+
+echo -n "Password: "
+read passwd
+
+mega-login $email $passwd

@@ -8,6 +8,7 @@ function help {
     echo "Options:"
     echo "  -h, --help                      show usages and exit"
     echo "      --debug                     set debug mode on"
+    echo "  -a, --all                       make the action for all components"
     echo ""
     echo "Modes"
     echo "  update                          update components from environment"
@@ -30,13 +31,13 @@ fi
 
 if ! [[ $LIB_DIR ]]
 then
-    export LIB_DIR=$FILE_DIR/lib
+    export LIB_DIR=$FILE_DIR/../lib
 fi
 
 source $LIB_DIR/functions
 
 CMD=""
-setArgs ""
+ARGS=""
 i=1
 while((i <= $#))
 do
@@ -56,6 +57,9 @@ do
             else
                 addArgs "${!i}"
             fi
+            ;;
+        -a | --all)
+            ALL=1
             ;;
         update | install | purge)
             MODE=${!i}
@@ -81,7 +85,21 @@ fi
 
 if [[ $CMD ]]
 then
-    $FILE_DIR/$CMD/setup $(args 2 -1) $MODE $(args 1)
+    if [[ -e "$FILE_DIR/$CMD/$MODE" ]]
+    then
+        $FILE_DIR/$CMD/$MODE $ARGS
+    else
+        abort "Not supported $MODE mode for $CMD component!" 6
+    fi
+    exit $?
+fi
+
+if [[ $ALL ]]
+then
+    for component in $(getComponents $FILE_DIR)
+    do
+        $0 $component $MODE $ARGS
+    done
     exit $?
 fi
 

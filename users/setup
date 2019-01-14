@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+
 function help {
-    echo "usage: $(basename $0) [options] <mode> <component>"
+    echo "usage: $(basename $0) [options] <mode> <user>"
     echo ""
-    echo "  Setup components in the current environment."
+    echo "  Setup users in the current environment."
     echo ""
     echo "Options:"
     echo "  -h, --help                      show usages and exit"
@@ -13,10 +14,10 @@ function help {
     echo "  update                          update components from environment"
     echo "  install                         install components from environment"
     echo "  purge                           uninstall components from environment"
-    echo "Components:"
-    for component in $(getComponents $FILE_DIR)
+    echo "Users:"
+    for user in $(sync-ls "/environment/users")
     do
-        echo "  $component"
+        echo "  $user"
     done
     exit 1
 }
@@ -30,7 +31,7 @@ fi
 
 if ! [[ $LIB_DIR ]]
 then
-    export LIB_DIR=$FILE_DIR/lib
+    export LIB_DIR=$FILE_DIR/../lib
 fi
 
 source $LIB_DIR/functions
@@ -42,7 +43,7 @@ while((i <= $#))
 do
     case ${!i} in
         -h | --help)
-            if ! [[ $CMD ]]
+            if ! [[ $(args) ]]
             then
                 help
             else
@@ -50,7 +51,7 @@ do
             fi
             ;;
         --debug)
-            if ! [[ $CMD ]]
+            if ! [[ $(args) ]]
             then
                 DEBUG=1
             else
@@ -61,28 +62,30 @@ do
             MODE=${!i}
             ;;
         *)
-            if ! [[ $CMD ]]
-            then
-                CMD="${!i}"
-            else
-                addArgs "${!i}"
-            fi
+            addArgs "${!i}"
             ;;
     esac
 
     i=$(expr ${i} + 1)
 done
 
+debug true
+
 if ! [[ $MODE ]]
 then
-    echo "Missing mode! Abort."
-    exit 6
-fi
-
-if [[ $CMD ]]
-then
-    $FILE_DIR/$CMD/setup $(args 2 -1) $MODE $(args 1)
+    abort "Missing mode!" 6
+else
+     if [[ -e "$FILE_DIR/bin/$MODE" ]]
+    then
+        debug true
+        $FILE_DIR/bin/$MODE $(args)
+    else
+        abort "Not supported $MODE mode!" 6
+    fi
     exit $?
 fi
 
+debug false
+
 help
+

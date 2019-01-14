@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if ! [[ $(which mega-logout) ]]
+then
+    echo "Missing sync module! Abort."
+    exit 6
+fi
+
+mega-logout

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+function sync
+{
+    /root/environment/lib/../modules/sync/bin/sync $@
+}
+
+function sync-login
+{
+    /root/environment/lib/../modules/sync/bin/sync-login $@
+}
+
+function sync-logout
+{
+    /root/environment/lib/../modules/sync/bin/sync-logout $@
+}
+
+function sync-ls
+{
+    /root/environment/lib/../modules/sync/bin/sync-ls $@
+}
+
