@@ -64,7 +64,7 @@ else
     user=$(args 1)
 
     debug true
-    sudo apt install zsh
+    sudo apt install i3
 
     EV="\$HOME/.local/environment"
     I3="\$HOME/.local/i3"
