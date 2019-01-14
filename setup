@@ -13,6 +13,7 @@ function help {
     echo "  update                          update components from environment"
     echo "  install                         install components from environment"
     echo "  purge                           uninstall components from environment"
+    echo ""
     echo "Components:"
     for component in $(getComponents $FILE_DIR)
     do
