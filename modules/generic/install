@@ -10,6 +10,7 @@ sudo apt install -y \
         openssl \
         net-tools \
         dnsutils \
-        iputils-ping
+        iputils-ping \
+        sshfs
 
 sudo apt clean -y

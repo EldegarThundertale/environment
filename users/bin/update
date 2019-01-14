@@ -66,13 +66,14 @@ then
 
     SYNC="\$HOME/.local/sync"
     su -l $user -c "mkdir -p $SYNC"
+    su -l $user -c "$EV/exec sync-login"
     su -l $user -c "$EV/exec sync $SYNC /environment/users/$user"
 
     for file in $(su -l $user -c "$EV/exec sync-ls /environment/users/$user")
     do
         if ! [[ -e $file ]]
         then
-            su -l $user -c "ln -sf $SYNC \$HOME/"
+            su -l $user -c "ln -sf $SYNC/$file \$HOME/"
         fi
     done
 
