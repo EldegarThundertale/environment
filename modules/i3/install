@@ -66,11 +66,11 @@ else
     debug true
     sudo apt install zsh
 
-    sudo su -l $user -c "$EV/exec sync-login"
-
     EV="\$HOME/.local/environment"
     I3="\$HOME/.local/i3"
     I3_CONFIG="\$HOME/.config/i3"
+
+    sudo su -l $user -c "$EV/exec sync-login"
 
     sudo su -l $user -c "mkdir -p $I3 $I3_CONFIG"
     sudo su -l $user -c "$EV/exec sync $I3 /environment/modules/i3"

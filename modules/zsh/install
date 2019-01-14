@@ -66,11 +66,11 @@ else
     debug true
     sudo apt install zsh
 
-    sudo su -l $user -c "$EV/exec sync-login"
-
     EV="\$HOME/.local/environment"
     ZSH="\$HOME/.local/zsh"
     ZSH_CONFIG="\$HOME/.config/zsh"
+
+    sudo su -l $user -c "$EV/exec sync-login"
 
     sudo su -l $user -c "mkdir -p $ZSH $ZSH_CONFIG"
     sudo su -l $user -c "$EV/exec sync $ZSH /environment/modules/zsh"
