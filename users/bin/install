@@ -32,6 +32,7 @@ fi
 
 source $LIB_DIR/functions
 
+OPTIONS=""
 setArgs ""
 i=1
 while((i <= $#))
@@ -42,6 +43,7 @@ do
             ;;
         --debug)
             DEBUG=1
+            OPTIONS="$OPTIONS${!i} "
             ;;
         *)
             addArgs "${!i}"
@@ -76,7 +78,7 @@ else
     EV="$home/.local/environment"
     su -l $user -c "git clone https://github.com/EldegarThundertale/environment.git $EV"
 
-    $FILE_DIR/update eldegar
+    $FILE_DIR/update $OPTIONS eldegar
     exit 0
 fi
 

@@ -5,6 +5,11 @@ function sync
     /root/environment/lib/../modules/sync/bin/sync $@
 }
 
+function sync-exclude
+{
+    /root/environment/lib/../modules/sync/bin/sync-exclude $@
+}
+
 function sync-login
 {
     /root/environment/lib/../modules/sync/bin/sync-login $@

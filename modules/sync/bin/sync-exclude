@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if ! [[ $(which mega-exclude) ]]
+then
+    echo "Missing sync module! Abort."
+    exit 6
+fi
+
+PATTERNS=""
+for pattern in $(mega-exclude | sed 's/List of excluded names://g' | awk '{ print "\""$0"\""}')
+do
+        PATTERNS="$PATTERNS $pattern"
+done
+mega-exclude -d ${PATTERNS}
+
+

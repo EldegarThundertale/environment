@@ -67,6 +67,7 @@ then
     SYNC="\$HOME/.local/sync"
     su -l $user -c "mkdir -p $SYNC"
     su -l $user -c "$EV/exec sync-login"
+    su -l $user -c "$EV/exec sync-exclude"
     su -l $user -c "$EV/exec sync $SYNC /environment/users/$user"
 
     for file in $(su -l $user -c "$EV/exec sync-ls /environment/users/$user")
