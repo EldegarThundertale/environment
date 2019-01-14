@@ -6,8 +6,7 @@ then
     exit 6
 fi
 
-$(mega-login)
-if [[ $? -gn 0 ]]
+if ! [[ $(mega-login) =~ "Already logged in" ]]
 then
     echo -n "Email: "
     read email
