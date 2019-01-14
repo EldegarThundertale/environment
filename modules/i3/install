@@ -69,18 +69,14 @@ else
     sudo su -l $user -c "$EV/exec sync-login"
 
     EV="\$HOME/.local/environment"
-    ZSH="\$HOME/.local/zsh"
-    ZSH_CONFIG="\$HOME/.config/zsh"
+    I3="\$HOME/.local/i3"
+    I3_CONFIG="\$HOME/.config/i3"
 
-    sudo su -l $user -c "mkdir -p $ZSH $ZSH_CONFIG"
-    sudo su -l $user -c "$EV/exec sync $ZSH /environment/modules/zsh"
+    sudo su -l $user -c "mkdir -p $I3 $I3_CONFIG"
+    sudo su -l $user -c "$EV/exec sync $I3 /environment/modules/i3"
 
-    sudo su -l $user -c "ln -sf $ZSH/.zshrc \$HOME/"
+    sudo su -l $user -c "ln -sf $I3/X11/.xinitrc \$HOME/"
 
-    sudo chsh -s /bin/zsh $user
-
-    sudo su -l $user -c "git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH_CONFIG"
-    sudo su -l $user -c "wget https://raw.githubusercontent.com/KorvinSilver/blokkzh/master/blokkzh.zsh-theme -O $ZSH_CONFIG/themes/blokkzh.zsh-theme"
     exit 0
 fi
 
