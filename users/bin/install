@@ -78,7 +78,7 @@ else
     EV="$home/.local/environment"
     su -l $user -c "git clone https://github.com/EldegarThundertale/environment.git $EV"
 
-    $FILE_DIR/update $OPTIONS eldegar
+    $FILE_DIR/update $OPTIONS $user
     exit 0
 fi
 
