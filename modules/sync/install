@@ -3,11 +3,11 @@
 wget https://mega.nz/linux/MEGAsync/xUbuntu_18.04/amd64/megacmd-xUbuntu_18.04_amd64.deb -O /tmp/sync.deb
 #wget https://mega.nz/linux/MEGAsync/xUbuntu_18.04/amd64/megasync-xUbuntu_18.04_amd64.deb -O /tmp/sync.deb
 
-sudo dpkg -i /tmp/sync.deb
+dpkg -i /tmp/sync.deb
 
-sudo apt update
-sudo apt -f install -y
+apt update
+apt -f install -y
 
-sudo apt clean -y
+apt clean -y
 
 

@@ -31,7 +31,6 @@ fi
 
 source $LIB_DIR/functions
 
-OPTIONS=""
 setArgs ""
 i=1
 while((i <= $#))
@@ -42,7 +41,6 @@ do
             ;;
         --debug)
             DEBUG=1
-            OPTIONS="$OPTIONS${!i} "
             ;;
         *)
             addArgs "${!i}"
@@ -64,23 +62,23 @@ else
     user=$(args 1)
 
     debug true
-    sudo apt install zsh
+    apt install zsh -y
 
     EV="\$HOME/.local/environment"
     ZSH="\$HOME/.local/zsh"
     ZSH_CONFIG="\$HOME/.config/zsh"
 
-    sudo su -l $user -c "$EV/exec sync-login"
+    su -l $user -c "$EV/exec sync-login"
 
-    sudo su -l $user -c "mkdir -p $ZSH $ZSH_CONFIG"
-    sudo su -l $user -c "$EV/exec sync $ZSH /environment/modules/zsh"
+    su -l $user -c "mkdir -p $ZSH $ZSH_CONFIG"
+    su -l $user -c "$EV/exec sync $ZSH /environment/modules/zsh"
 
-    sudo su -l $user -c "ln -sf $ZSH/.zshrc \$HOME/"
+    su -l $user -c "ln -sf $ZSH/.zshrc \$HOME/"
 
-    sudo chsh -s /bin/zsh $user
+    chsh -s /bin/zsh $user
 
-    sudo su -l $user -c "git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH_CONFIG"
-    sudo su -l $user -c "wget https://raw.githubusercontent.com/KorvinSilver/blokkzh/master/blokkzh.zsh-theme -O $ZSH_CONFIG/themes/blokkzh.zsh-theme"
+    su -l $user -c "git clone https://github.com/robbyrussell/oh-my-zsh.git $ZSH_CONFIG"
+    su -l $user -c "wget https://raw.githubusercontent.com/KorvinSilver/blokkzh/master/blokkzh.zsh-theme -O $ZSH_CONFIG/themes/blokkzh.zsh-theme"
     exit 0
 fi
 

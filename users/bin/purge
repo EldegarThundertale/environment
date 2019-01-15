@@ -67,7 +67,7 @@ else
     EV="\$HOME/.local/environment"
 
     su -l $user -c "$EV/exec sync-logout"
-    sudo userdel -f -r $user
+    userdel -f -r $user
     exit 0
 fi
 

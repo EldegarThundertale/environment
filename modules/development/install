@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-sudo apt update
-sudo apt $1 -y \
+
+apt update
+apt install -y \
         git \
         vim \
         nano \
@@ -11,4 +12,4 @@ sudo apt $1 -y \
         npm \
         openjdk-11-jdk
 
-sudo apt clean -y
+apt clean -y

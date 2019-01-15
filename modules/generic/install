@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-sudo apt update
-sudo apt install -y \
+apt update
+apt install -y \
         sudo \
         htop \
         wget \
@@ -13,4 +13,4 @@ sudo apt install -y \
         iputils-ping \
         sshfs
 
-sudo apt clean -y
+apt clean -y

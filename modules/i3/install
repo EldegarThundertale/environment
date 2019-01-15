@@ -64,18 +64,18 @@ else
     user=$(args 1)
 
     debug true
-    sudo apt install i3
+    apt install i3 -y
 
     EV="\$HOME/.local/environment"
     I3="\$HOME/.local/i3"
     I3_CONFIG="\$HOME/.config/i3"
 
-    sudo su -l $user -c "$EV/exec sync-login"
+    su -l $user -c "$EV/exec sync-login"
 
-    sudo su -l $user -c "mkdir -p $I3 $I3_CONFIG"
-    sudo su -l $user -c "$EV/exec sync $I3 /environment/modules/i3"
+    su -l $user -c "mkdir -p $I3 $I3_CONFIG"
+    su -l $user -c "$EV/exec sync $I3 /environment/modules/i3"
 
-    sudo su -l $user -c "ln -sf $I3/X11/.xinitrc \$HOME/"
+    su -l $user -c "ln -sf $I3/X11/.xinitrc \$HOME/"
 
     exit 0
 fi
