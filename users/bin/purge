@@ -56,7 +56,7 @@ then
     abort "Missing arguments!" 6
 fi
 
- if ! [[ $(cat /etc/passwd | grep $(args 1)) ]]
+ if ! [[ $(cat /etc/passwd | grep -e "^$(args 1)") ]]
 then
     abort "User $(args 1) not exists!" 3
 else

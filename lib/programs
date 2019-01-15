@@ -2,26 +2,26 @@
 
 function sync
 {
-    /root/environment/lib/../modules/sync/bin/sync $@
+    /home/luca/eilertenstudio/environment/lib/../modules/sync/bin/sync $@
 }
 
 function sync-exclude
 {
-    /root/environment/lib/../modules/sync/bin/sync-exclude $@
+    /home/luca/eilertenstudio/environment/lib/../modules/sync/bin/sync-exclude $@
 }
 
 function sync-login
 {
-    /root/environment/lib/../modules/sync/bin/sync-login $@
+    /home/luca/eilertenstudio/environment/lib/../modules/sync/bin/sync-login $@
 }
 
 function sync-logout
 {
-    /root/environment/lib/../modules/sync/bin/sync-logout $@
+    /home/luca/eilertenstudio/environment/lib/../modules/sync/bin/sync-logout $@
 }
 
 function sync-ls
 {
-    /root/environment/lib/../modules/sync/bin/sync-ls $@
+    /home/luca/eilertenstudio/environment/lib/../modules/sync/bin/sync-ls $@
 }
 
